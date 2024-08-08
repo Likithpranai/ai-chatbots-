@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import aiChatbot from "./Pages/aiChatbot";
 import aiImageGenerator from "./Pages/aiImageGenerator";
 import Home from "./Pages/Home";
-import Login from "./Components/Login";
+import Login from "./Pages/Login";
 
 function App() {
   return (
