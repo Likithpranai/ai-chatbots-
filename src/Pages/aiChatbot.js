@@ -9,8 +9,7 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 
-const API_KEY =
-  "sk-3D-bxkwp4LSneCVFK2qPNNjNIslixCNih8cZTpXCGqT3BlbkFJC4qKiRf1UmPk55HMXrbOfLmYQYOYKG2p-xus7PpVgA";
+const API_KEY = "";
 
 const AiChatbot = () => {
   const [typing, setTyping] = useState(false);
