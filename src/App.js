@@ -3,7 +3,7 @@ import "./App.css";
 import Signup from "./Components/Signup";
 import Navbar from "./Components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import aiChatbot from "./Pages/aiChatbot";
+import Chatbot from "./Pages/AiChatbot";
 import aiImageGenerator from "./Pages/aiImageGenerator";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -16,7 +16,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/ai-chatbot" element={<aiChatbot />}></Route>
+          <Route path="/ai-chatbot" element={<Chatbot />}></Route>
           <Route
             path="/ai-image-generator"
             element={<aiImageGenerator />}

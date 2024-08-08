@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase"; // Assuming you've set up the Firebase configuration
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -55,9 +55,11 @@ const Login = () => {
           </form>
           <div className="flex space-x-6 justify-center text-center">
             <p className="mt-2">Don't have an account?</p>
-            <button className="bg-blue-500 text-white px-4 py-2 mb-9 rounded-full hover:bg-blue-600">
-              Signup
-            </button>
+            <Link to="/signup">
+              <button className="bg-blue-500 text-white px-4 py-2 mb-9 rounded-full hover:bg-blue-600">
+                Signup
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = () => {
@@ -21,7 +21,7 @@ const Signup = () => {
       }
     } catch (error) {
       setError(error.message); // Set the error message to display
-      console.error(error);
+      console.error("Failed to Sign Up");
     }
   };
 
@@ -67,9 +67,11 @@ const Signup = () => {
           </form>
           <div className="flex space-x-6 justify-center text-center">
             <p className="mt-1">Already have an account?</p>
-            <button className="bg-blue-500 text-white px-4 py-1 mb-9 rounded-full hover:bg-blue-600">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="bg-blue-500 text-white px-4 py-1 mb-9 rounded-full hover:bg-blue-600">
+                Login
+              </button>
+            </Link>
           </div>
         </div>
       </div>
