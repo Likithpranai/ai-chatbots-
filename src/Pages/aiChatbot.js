@@ -8,8 +8,7 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
-
-const API_KEY = "";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const AiChatbot = () => {
   const [typing, setTyping] = useState(false);
@@ -21,58 +20,52 @@ const AiChatbot = () => {
     },
   ]);
 
+  const genAI = new GoogleGenerativeAI(
+    "AIzaSyCZ8_Rs6r6MkDgSw3VMC3iaeEvfOSs8p5s"
+  );
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+  });
+
   const handleSend = async (message) => {
-    const newMessage = {
-      message: message,
-      sender: "user",
-      direction: "outgoing",
-    };
-    const newMessages = [...messages, newMessage];
-    // Update the messages here
+    if (!message.trim()) return; // Prevent sending empty messages
+    try {
+      setTyping(true);
+      const result = await model.generateContent(message);
+      const response = result.response;
 
-    setMessages(newMessages);
-    // Set a typing indicator (ChatGPT is typing )
-    setTyping(true);
-    // Process message to chatgpt and receive a response
-    await processMessageToChatGPT(newMessages);
+      // Sanitize the response to remove Markdown
+      const sanitizedResponse = response.text().replace(/[#*_`~]/g, "");
+
+      // Update messages state
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          message: message,
+          sender: "user",
+          direction: "outgoing", // User message
+        },
+        {
+          message: sanitizedResponse,
+          sender: "ChatGPT",
+          direction: "incoming", // ChatGPT message
+        },
+      ]);
+      setTyping(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          message: "Oops! Something went wrong. Please try again.",
+          sender: "ChatGPT",
+          direction: "incoming",
+        },
+      ]);
+      setTyping(false);
+    }
   };
-
-  async function processMessageToChatGPT(chatMessages) {
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
-      if (messageObject.sender === "ChatGPT") {
-        role = "assistant";
-      } else {
-        role = "user";
-      }
-      return { role: role, content: messageObject.message };
-    });
-
-    // role: user assistant and system
-    const systemMessage = {
-      role: "system",
-      content: "Explain all concepts like I am 10 years old.",
-    };
-
-    const apiRequestBody = {
-      model: "gpt-3.5-turbo",
-      messages: [systemMessage, ...apiMessages],
-    };
-    await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(apiRequestBody),
-    })
-      .then((data) => {
-        return data.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
-  }
 
   return (
     <div
@@ -115,15 +108,27 @@ const AiChatbot = () => {
                       ? "https://via.placeholder.com/150"
                       : undefined
                   }
-                />
+                  style={{
+                    backgroundColor: "transparent", // Set to transparent
+                    borderRadius: "10px",
+                    padding: "10px",
+                    margin: "5px",
+                    alignSelf:
+                      message.sender === "ChatGPT" ? "flex-start" : "flex-end", // Align messages
+                  }}
+                >
+                  <div>{message.message}</div>
+                </Message>
               );
             })}
           </MessageList>
           <MessageInput
             placeholder="Type your message here..."
-            onSend={handleSend}
+            onSend={(message) => handleSend(message)}
             style={{
               width: "100%",
+              backgroundColor: "transparent", // Set input background to transparent
+              border: "1px solid #ccc", // Optional: add a border for visibility
             }}
           />
         </ChatContainer>

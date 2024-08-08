@@ -14,7 +14,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Redirect to the home page after successful login
-      navigate("/");
+      navigate("/ai-chatbot");
     } catch (err) {
       setError(err.message);
     }

@@ -15,7 +15,7 @@ const Signup = () => {
     try {
       if (password === confirmPassword) {
         await createUserWithEmailAndPassword(auth, email, password);
-        navigate("/home"); // Redirect to the home page after successful signup
+        navigate("/ai-chatbot"); // Redirect to the home page after successful signup
       } else {
         setError("Passwords do not match");
       }
